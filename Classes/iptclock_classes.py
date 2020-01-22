@@ -260,7 +260,7 @@ class Clock:
     # Function playing song at time    
     def PlayASoundFile(self, pathToSoundFile):
         if ( installedPyaudio ):
-            CHUNK = 64  # 1024
+            CHUNK = 1024
             wf = wave.open(pathToSoundFile, 'rb')
             
             # instantiate PyAudio (1)
@@ -280,12 +280,12 @@ class Clock:
                 stream.write(data)
                 data = wf.readframes(CHUNK)
 
-                # stop stream (4)
-                stream.stop_stream()
-                stream.close()
+            # stop stream (4)
+            stream.stop_stream()
+            stream.close()
                 
-                # close PyAudio (5)
-                p.terminate()
+            # close PyAudio (5)
+            p.terminate()
 
         
     # function updating the time
