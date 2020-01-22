@@ -18,11 +18,15 @@ clockColours = ['#7DC7EE', '#FED812', '#d32c2c', '#864da0']  # List of colours f
 # Path to sponsor image [Presently PNG!], if using tkinter and label, it has to be in GIF and if we use matplotlib it has to be in PNG.
 leftSponsImagePath = './Images/Sponsors/sponsors.png' #./Images/Sponsors/sponsors.png' # './testPicture.gif'  # './ponyAndDuck.gif'
 
-pathToSoundFile = ''#'./Audio/theDuckSong2.wav'  # If left empty nothing happens, requires [.wav]
+pathToSoundFile = './Audio/theDuckSong2.wav'  # If left empty nothing happens, requires [.wav]
+
+beefAllowed = False
+pathToBeepLow = './Audio/g6_2s.wav'
+pathToBeepHigh = './Audio/b6_2s.wav'
+pathToBeepFinal = ''
 
 stagesPath = "./Stages/stages.txt"  # Stages config path
 
 # To be introduced...:
 defaultFont = 'Courier New' # string deciding the standard font
-
 

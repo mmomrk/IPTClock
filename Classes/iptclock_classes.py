@@ -227,7 +227,7 @@ class Clock:
         self.stage = Stage()
         self.timer = Timer()
         self.clock_graphics = ClockGraphics(self._tkHandle)
-        self.startPlayingSongTime = 55 # time in seconds when death mode sound is played
+        self.startPlayingSongTime = -817 # time in seconds when death mode sound is played
 
         self.countdownText, self.presentationTextLabel, self.wrapLength = create_clock_labels(self._tkHandle)  # orig on LH self.challengeTimeLabel
 
@@ -312,6 +312,13 @@ class Clock:
                     self.is_low_health = True # update boolean so we don't call it more than once
                     self.low_health_mode()            
 
+            # Poll beeping dispatcher method if configured
+            if beefAllowed:
+                self.beepSignal()
+
+            if self.startPlayingSongTime - 1 < self.timer.time() < self.startPlayingSongTime + 1   : # +1 since we update after time update. another +1 to activate at the specified time.
+                _thread.start_new_thread(self.PlayASoundFile, (pathToSoundFile,))
+
         # Call the update() function after 1/fps seconds
         dt = (time.time() - t0) * 1000
         time_left = max(0, int(1000 / fps - dt))
@@ -356,9 +363,25 @@ class Clock:
         background_colour = 'red' # colour of last wedge part in low health
         self.clock_graphics.set_wedge_background_colour(background_colour)
         
-        # for playing low health sound
-#            if usePython3:
-#                    _thread.start_new_thread(self.PlayASoundFile, (pathToSoundFile,))
+    # Low beep @t-1min (2min for report), high beep @t-30sec, final beep @t-0
+    def beepSignal(self):
+        try:
+            if "Presentation of the report" in self.stage.description():
+                # The following expression can be considered magic sign-wise, yet it works:
+                if 119 < self.timer.time() < 121:
+                    _thread.start_new_thread(self.PlayASoundFile, (pathToBeepLow,))
+            else:
+                if 59 < self.timer.time() < 61:
+                    _thread.start_new_thread(self.PlayASoundFile, (pathToBeepLow,))
+
+            if 29 < self.timer.time() < 31:
+                _thread.start_new_thread(self.PlayASoundFile, (pathToBeepHigh,))
+
+            if -1 < self.timer.time() < 1:
+                _thread.start_new_thread(self.PlayASoundFile, (pathToBeepFinal,))
+        except:
+            print ("BEEEEEP")
+
 
 #######################
 # ClockGraphics Class #
